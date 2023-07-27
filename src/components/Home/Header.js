@@ -5,35 +5,25 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import ImageSrc from "../../Images/appIcon.jpg";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import { useNavigate } from "react-router-dom";
-const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function Header(props) {
   const { page } = props;
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -94,14 +84,14 @@ function Header(props) {
                 color: "#fff",
               }}
               onClick={() => {
-                if (page == "home") {
+                if (page === "home") {
                   navigate("/add");
                 } else {
                   navigate("/");
                 }
               }}
             >
-              {page == "home" ? "Add Records" : "Records"}
+              {page === "home" ? "Add Records" : "Records"}
             </Button>
           </Box>
 

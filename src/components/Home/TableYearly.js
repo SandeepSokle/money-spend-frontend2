@@ -7,10 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { Button } from "@mui/material";
-import { get_Records, get_Records_monthly, get_Records_yearly } from "../functions/user";
-import moment from "moment/moment";
-import { useNavigate } from "react-router-dom";
+import { get_Records_yearly } from "../functions/user";
 
 const columns = [
   {
@@ -29,7 +26,6 @@ export default function TableYearly() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [tableData, setTableData] = React.useState(null);
-  const navigate = useNavigate();
 
   const getData = async () => {
     let dt = await get_Records_yearly();
@@ -85,7 +81,7 @@ export default function TableYearly() {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     {columns.map((column) => {
                       const value = row[column.id];
-                      if ( column.id == "year") {
+                      if (column.id === "year") {
                         return (
                           <TableCell
                             width={{ md: "18rem", xs: "12rem" }}

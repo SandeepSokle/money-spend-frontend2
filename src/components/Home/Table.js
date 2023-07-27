@@ -64,7 +64,7 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
   }, []);
 
   React.useEffect(() => {
-    if (search != "" && dateFilter != null) {
+    if (search != "" && dateFilter !== null) {
       setTableData(
         completeData.filter((ele) => {
           return (
@@ -75,7 +75,7 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
       );
     } else if (search === "" && dateFilter === null) {
       setTableData(completeData);
-    } else if (search && search != "") {
+    } else if (search && search !== "") {
       setTableData(
         completeData.filter((ele) => {
           return ele.spendBy.includes(search) || ele.spendFor.includes(search);
@@ -84,17 +84,11 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
     } else {
       setTableData(
         completeData.filter((ele) => {
-          console.log({
-            ...ele,
-            dateFilter:moment(dateFilter).format("DD:MM:YYYY"),
-            date:moment(ele.date).format("DD:MM:YYYY"),
-            compare: moment(ele.date).isSame(dateFilter, "day"),
-          });
           return moment(ele.date).isSame(dateFilter, "day");
         })
       );
     }
-  }, [search, dateFilter]);
+  }, [search, dateFilter,completeData]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -135,7 +129,7 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     {columns.map((column) => {
                       const value = row[column.id];
-                      if (column.id == "action") {
+                      if (column.id === "action") {
                         return (
                           <TableCell
                             width={{ md: "18rem", xs: "12rem" }}
@@ -158,7 +152,7 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
                             </Button>
                           </TableCell>
                         );
-                      } else if (column.id == "date") {
+                      } else if (column.id === "date") {
                         return (
                           <TableCell
                             width={{ md: "18rem", xs: "12rem" }}

@@ -7,10 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { Button } from "@mui/material";
-import { get_Records, get_Records_monthly } from "../functions/user";
-import moment from "moment/moment";
-import { useNavigate } from "react-router-dom";
+import {  get_Records_monthly } from "../functions/user";
 
 const monthArray = [
   "January",
@@ -49,7 +46,6 @@ export default function TableMonth() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [tableData, setTableData] = React.useState(null);
-  const navigate = useNavigate();
 
   const getData = async () => {
     let dt = await get_Records_monthly();
@@ -105,7 +101,7 @@ export default function TableMonth() {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     {columns.map((column) => {
                       const value = row[column.id];
-                      if (column.id == "month") {
+                      if (column.id === "month") {
                         return (
                           <TableCell
                             width={{ md: "18rem", xs: "12rem" }}
@@ -116,7 +112,7 @@ export default function TableMonth() {
                             {monthArray[row._id[column.id] - 1]}
                           </TableCell>
                         );
-                      } else if (column.id == "year") {
+                      } else if (column.id === "year") {
                         return (
                           <TableCell
                             width={{ md: "18rem", xs: "12rem" }}
