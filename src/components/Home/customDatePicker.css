@@ -1,0 +1,6 @@
+.react-datepicker-popper {
+  z-index: 11 !important;
+}
+input:not([type="range"]):not([type="color"]) {
+  height: 30px;
+}
