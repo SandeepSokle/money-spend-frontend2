@@ -1,10 +1,8 @@
 import * as React from "react";
 
 import "./customDatePicker.css";
-import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// CSS Modules, react-datepicker-cssmodules.css//
 import "react-datepicker/dist/react-datepicker-cssmodules.css";
 
 export default function CustomDatePicker(props) {

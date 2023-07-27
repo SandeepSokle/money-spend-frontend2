@@ -44,14 +44,6 @@ export const get_Records = async () => {
 
 export const edit_Record_API = async (data) => {
   const { spendBy, spendFor, amount, dateValue, _id } = data;
-
-  console.log({
-    spendBy,
-    spendFor,
-    amount,
-    dateValue,
-    _id,
-  });
   try {
     let data = await axios.post(
       `${API_URL}transaction/edit_record`,

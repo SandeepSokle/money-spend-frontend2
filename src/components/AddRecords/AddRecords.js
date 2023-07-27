@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Header from "../Home/Header";
-import { Container, FormLabel, TextField, Button, Box } from "@mui/material";
+import { Container,  TextField, Button, Box } from "@mui/material";
 import { add_Record_API } from "../functions/user";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -20,15 +20,15 @@ export const AddRecords = () => {
     setSpendByError(false);
     setSpendForError(false);
     setAmountError(false);
-    if (spendBy == "") {
+    if (spendBy === "") {
       setSpendByError(true);
       return;
     }
-    if (spendFor == "") {
+    if (spendFor === "") {
       setSpendForError(true);
       return;
     }
-    if (amount == "" || amount <= 0) {
+    if (amount === "" || amount <= 0) {
       setAmountError(true);
       return;
     }

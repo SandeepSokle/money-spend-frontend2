@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Home/Header";
-import { Container, FormLabel, TextField, Button, Box } from "@mui/material";
-import { add_Record_API, edit_Record_API, token } from "../functions/user";
+import { Container, TextField, Button, Box } from "@mui/material";
+import { edit_Record_API, token } from "../functions/user";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../functions/config";
@@ -17,11 +17,6 @@ export const EditRecords = () => {
   const navigate = useNavigate();
 
   const { status, id } = useParams();
-
-  console.log({
-    status,
-    id,
-  });
 
   const getTransactionData = async ({ id }) => {
     try {
@@ -44,7 +39,7 @@ export const EditRecords = () => {
 
   useEffect(() => {
     if (id) getTransactionData({ id });
-  }, []);
+  }, [id]);
 
   const handleSubmit = async (event) => {
     if (status === "delete") {
@@ -70,15 +65,15 @@ export const EditRecords = () => {
       setSpendByError(false);
       setSpendForError(false);
       setAmountError(false);
-      if (spendBy == "") {
+      if (spendBy === "") {
         setSpendByError(true);
         return;
       }
-      if (spendFor == "") {
+      if (spendFor === "") {
         setSpendForError(true);
         return;
       }
-      if (amount == "" || amount <= 0) {
+      if (amount === "" || amount <= 0) {
         setAmountError(true);
         return;
       }
@@ -91,8 +86,7 @@ export const EditRecords = () => {
           dateValue,
           _id: id,
         });
-
-        navigate("/");
+        if (record) navigate("/");
       }
     }
   };
@@ -115,7 +109,7 @@ export const EditRecords = () => {
             variant="outlined"
             color="primary"
             type="text"
-            disabled={status == "delete"}
+            disabled={status === "delete"}
             sx={{ mb: 3 }}
             fullWidth
             value={spendBy}
@@ -129,7 +123,7 @@ export const EditRecords = () => {
             color="primary"
             type="text"
             rows={3}
-            disabled={status == "delete"}
+            disabled={status === "delete"}
             multiline
             sx={{ mb: 3 }}
             fullWidth
@@ -141,7 +135,7 @@ export const EditRecords = () => {
             onChange={(e) => setAmount(e.target.value)}
             required
             variant="outlined"
-            disabled={status == "delete"}
+            disabled={status === "delete"}
             color="primary"
             type="number"
             value={amount}
@@ -152,7 +146,7 @@ export const EditRecords = () => {
           <TextField
             label="Date"
             onChange={(e) => setDateValue(e.target.value)}
-            disabled={status == "delete"}
+            disabled={status === "delete"}
             variant="outlined"
             color="primary"
             type="date"
