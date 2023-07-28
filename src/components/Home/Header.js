@@ -111,7 +111,7 @@ function Header(props) {
                 <Avatar
                   sx={{ sizes: { xs: "10px", md: "16px" } }}
                   alt="Sandeep Sokle"
-                  src="/static/images/avatar/2.jpg"
+                  // src="/static/images/avatar/2.jpg"
                 />
               </IconButton>
             </Tooltip>
