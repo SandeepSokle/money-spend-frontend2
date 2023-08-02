@@ -11,6 +11,7 @@ import { Button } from "@mui/material";
 import { get_Records } from "../functions/user";
 import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const columns = [
   {
@@ -18,7 +19,6 @@ const columns = [
     label: "Date",
     minWidth: 150,
     format: (value) => {
-      console.log({ value });
       return moment(value).format("LL");
     },
   },
@@ -27,22 +27,17 @@ const columns = [
     id: "spendFor",
     label: "Money Spend For",
     minWidth: 170,
-    // align: "right",
-    // format: (value) => value.toLocaleString("en-US"),
   },
   {
     id: "amount",
     label: "Amount",
     minWidth: 100,
-    // align: "right",
-    // format: (value) => value.toLocaleString("en-US"),
   },
   {
     id: "action",
     label: "Actions",
     minWidth: 150,
     align: "center",
-    // format: (value) => value.toLocaleString("en-US"),
   },
 ];
 
@@ -53,22 +48,33 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
   const [completeData, setCompleteData] = React.useState([]);
   const navigate = useNavigate();
 
+  const userData = useSelector((state) => {
+    return state.user;
+  });
+
   const getData = async () => {
-    let dt = await get_Records();
-    setTableData(dt.record);
-    setCompleteData(dt.record);
+    if (userData._id) {
+      let dt = await get_Records({ userData });
+      setTableData(dt?.record);
+      setCompleteData(dt?.record);
+    }
   };
 
   React.useEffect(() => {
-    getData();
-  }, []);
+    if (userData) getData();
+  }, [userData]);
 
   React.useEffect(() => {
     if (search !== "" && dateFilter !== null) {
       setTableData(
         completeData.filter((ele) => {
           return (
-            (ele.spendBy.includes(search) || ele.spendFor.includes(search)) &&
+            (ele.spendBy.toLowerCase().includes(search.toLowerCase()) ||
+              ele.amount
+                .toString()
+                .toLowerCase()
+                .includes(search.toLowerCase()) ||
+              ele.spendFor.toLowerCase().includes(search.toLowerCase())) &&
             moment(ele.date).isSame(dateFilter, "day")
           );
         })
@@ -78,7 +84,14 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
     } else if (search && search !== "") {
       setTableData(
         completeData.filter((ele) => {
-          return ele.spendBy.includes(search) || ele.spendFor.includes(search);
+          return (
+            ele.spendBy.toLowerCase().includes(search.toLowerCase()) ||
+            ele.amount
+              .toString()
+              .toLowerCase()
+              .includes(search.toLowerCase()) ||
+            ele.spendFor.toLowerCase().includes(search.toLowerCase())
+          );
         })
       );
     } else {
@@ -88,7 +101,7 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
         })
       );
     }
-  }, [search, dateFilter,completeData]);
+  }, [search, dateFilter, completeData]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -105,10 +118,10 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {columns.map((column, idx) => (
                 <TableCell
                   width={{ md: "18rem", xs: "12rem" }}
-                  key={column.id}
+                  key={`${column.id}_${new Date().toTimeString()}_${idx}`}
                   align={column.align}
                   sx={{
                     fontSize: { md: "18px", xs: "12px" },
@@ -124,16 +137,23 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
           <TableBody>
             {tableData
               ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
+              .map((row, id) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={`${row.code}_${new Date().toTimeString()}_${id}`}
+                  >
+                    {columns.map((column, idx) => {
                       const value = row[column.id];
                       if (column.id === "action") {
                         return (
                           <TableCell
                             width={{ md: "18rem", xs: "12rem" }}
-                            key={column.id}
+                            key={`${
+                              column.id
+                            }_${new Date().toTimeString()}_${idx}`}
                             align={column.align}
                           >
                             <Button
@@ -156,7 +176,9 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
                         return (
                           <TableCell
                             width={{ md: "18rem", xs: "12rem" }}
-                            key={column.id}
+                            key={`${
+                              column.id
+                            }_${new Date().toTimeString()}_${idx}`}
                             align={column.align}
                           >
                             {moment(row[column.id]).format("LL")}
@@ -166,7 +188,9 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
                         return (
                           <TableCell
                             width={{ md: "18rem", xs: "12rem" }}
-                            key={column.id}
+                            key={`${
+                              column.id
+                            }_${new Date().toTimeString()}_${idx}`}
                             align={column.align}
                           >
                             {column.format && typeof value === "number"
@@ -182,15 +206,17 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 100]}
-        component="div"
-        count={tableData?.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      {tableData ? (
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, 100]}
+          component="div"
+          count={tableData?.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      ) : null}
     </Paper>
   );
 }

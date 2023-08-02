@@ -1,10 +1,10 @@
 import axios from "axios";
 import { API_URL } from "./config";
-export const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiU2FuZGVlcCBTb2tsZSIsImVtYWlsIjoic2FuZGVlcHNva2xlMTJAZ21haWwuY29tIiwicGhvbmUiOjk3Mjk5MjgzODcsIl9pZCI6IjY0YWMyMjEzNTUwYWYwNGVjMzFmY2I3YyIsImlhdCI6MTY4OTA3Mzc4NH0.GxijRwcHEmgVzNRR_itPyuScy0iYZuzL5YSHRUn91sw";
+import { increment } from "../../redux/user/action";
 
 export const add_Record_API = async (data) => {
   const { spendBy, spendFor, amount, dateValue } = data;
+  const token = window.localStorage.getItem("moneySpendsToken");
   try {
     let data = await axios.post(
       `${API_URL}transaction/add_record`,
@@ -26,10 +26,11 @@ export const add_Record_API = async (data) => {
   }
 };
 
-export const get_Records = async () => {
+export const get_Records = async ({ userData }) => {
+  const token = window.localStorage.getItem("moneySpendsToken");
   try {
     let data = await axios.get(
-      `${API_URL}transaction/get_record?user=64ac2213550af04ec31fcb7c`,
+      `${API_URL}transaction/get_record?user=${userData._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -44,6 +45,7 @@ export const get_Records = async () => {
 
 export const edit_Record_API = async (data) => {
   const { spendBy, spendFor, amount, dateValue, _id } = data;
+  const token = window.localStorage.getItem("moneySpendsToken");
   try {
     let data = await axios.post(
       `${API_URL}transaction/edit_record`,
@@ -66,36 +68,83 @@ export const edit_Record_API = async (data) => {
   }
 };
 
-export const get_Records_monthly = async () => {
+export const get_Records_monthly = async ({ userData }) => {
+  const token = window.localStorage.getItem("moneySpendsToken");
   try {
     let data = await axios.get(
-      `${API_URL}transaction/get_record/monthly?user=64ac2213550af04ec31fcb7c`,
+      `${API_URL}transaction/get_record/monthly?user=${userData._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
-    console.log({ data });
     return data.data;
   } catch (error) {
     return null;
   }
 };
 
-export const get_Records_yearly = async () => {
+export const get_Records_yearly = async ({ userData }) => {
+  const token = window.localStorage.getItem("moneySpendsToken");
   try {
     let data = await axios.get(
-      `${API_URL}transaction/get_record/yearly?user=64ac2213550af04ec31fcb7c`,
+      `${API_URL}transaction/get_record/yearly?user=${userData}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
-    console.log({ data });
     return data.data;
   } catch (error) {
     return null;
+  }
+};
+
+export const user_login = async ({ email, password, dispatch }) => {
+  try {
+    let user = await axios.post(`${API_URL}user/login`, {
+      email,
+      password,
+    });
+    window.localStorage.setItem("moneySpendsToken", user.data.token);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const user_signUp = async ({ userDetail }) => {
+  try {
+    let user = await axios.post(`${API_URL}user/signup`, {
+      ...userDetail,
+    });
+    window.localStorage.setItem("moneySpendsToken", user.data.token);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const get_user_detail = async ({ dispatch }) => {
+  const token = window.localStorage.getItem("moneySpendsToken");
+  try {
+    if(!token) throw "not any user"
+    let user = await axios.get(`${API_URL}user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    dispatch(
+      increment({
+        data: {
+          ...user.data.user,
+        },
+      })
+    );
+    return user.data;
+  } catch (error) {
+    return 0;
   }
 };

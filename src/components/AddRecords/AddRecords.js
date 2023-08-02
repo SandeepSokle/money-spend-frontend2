@@ -33,27 +33,19 @@ export const AddRecords = () => {
       return;
     }
     if (spendBy && spendFor && amount) {
-      const record = await add_Record_API({
+      await add_Record_API({
         spendBy,
         spendFor,
         amount,
         dateValue: moment(dateValue).format("YYYY-MM-DD[T00:00:00.000Z]"),
       });
-
-      console.log({
-        record,
-      });
       navigate("/");
     }
-    // setSpendBy("");
-    // setSpendFor("");
-    // setAmount(0);
   };
 
   return (
     <>
       <Header page={"addrecords"} />
-
       <Container
         sx={{
           width: { xs: "95%", md: "70%" },

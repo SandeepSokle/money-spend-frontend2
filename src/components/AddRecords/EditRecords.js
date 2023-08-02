@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Home/Header";
 import { Container, TextField, Button, Box } from "@mui/material";
-import { edit_Record_API, token } from "../functions/user";
+import { edit_Record_API } from "../functions/user";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../functions/config";
@@ -19,6 +19,7 @@ export const EditRecords = () => {
   const { status, id } = useParams();
 
   const getTransactionData = async ({ id }) => {
+    const token = window.localStorage.getItem("moneySpendsToken");
     try {
       let data = await axios.get(`${API_URL}transaction/get_record?id=${id}`, {
         headers: {
@@ -27,7 +28,6 @@ export const EditRecords = () => {
       });
       data = data.data.record;
       if (!data) return;
-      // console.log({ data: data.data.record });
       setSpendBy(data.spendBy);
       setDateValue(data.date);
       setSpendFor(data.spendFor);
@@ -43,7 +43,8 @@ export const EditRecords = () => {
 
   const handleSubmit = async (event) => {
     if (status === "delete") {
-      try {
+    const token = window.localStorage.getItem("moneySpendsToken");
+    try {
         let data = await axios.delete(
           `${API_URL}transaction/delete_record?id=${id}`,
           {
@@ -54,7 +55,6 @@ export const EditRecords = () => {
         );
         data = data.data.record;
         if (!data) return;
-        // console.log({ data: data.data.record });
         navigate("/");
       } catch (err) {
         console.log(err);

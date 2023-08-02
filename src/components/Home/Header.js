@@ -12,21 +12,34 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import { useNavigate } from "react-router-dom";
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { useSelector } from "react-redux";
+const settings = ["Profile", "Account", "Logout"];
 
 function Header(props) {
   const { page } = props;
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const navigate = useNavigate();
+  const [firstLetter, setFirstLetter] = React.useState("");
 
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
+  const userData = useSelector((state) => {
+    return state.user;
+  });
 
-  const handleCloseUserMenu = () => {
+  React.useEffect(() => {
+    if (userData) setFirstLetter(userData.name.charAt(0).toUpperCase());
+  }, [userData]);
+
+  const handleCloseUserMenu = ({ setting }) => {
     setAnchorElUser(null);
+    if (setting && setting?.toLowerCase() === "logout") {
+      window.localStorage.removeItem("moneySpendsToken");
+      navigate("/login");
+    }
   };
 
   return (
@@ -40,7 +53,8 @@ function Header(props) {
       >
         <Toolbar disableGutters>
           <CurrencyExchangeIcon
-            sx={{ display: { xs: "flex", md: "flrx" }, mr: 1 }}
+            fontSize="small"
+            sx={{ display: { xs: "flex", md: "flex" }, mr: 0.5 }}
           />
 
           <Typography
@@ -50,13 +64,20 @@ function Header(props) {
             href=""
             sx={{
               //   mr: 2,
-              display: { xs: "flex", md: "flex", fontSize: "18px" },
-              flexGrow: 1,
+              display: {
+                xs: "flex",
+                md: "flex",
+                fontSize: "18px",
+                mr: 4,
+                paddingRight: 4,
+              },
+              flexGrow: 2,
               //   fontFamily: "monospace",
-              fontWeight: 500,
+              fontWeight: 600,
               //   letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              zIndex: 10,
             }}
           >
             Expenses
@@ -97,22 +118,30 @@ function Header(props) {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton
+                component={"div"}
+                onClick={handleOpenUserMenu}
+                sx={{ p: 0 }}
+              >
                 <Box
                   sx={{
-                    marginRight: 1,
+                    marginRight: 0.5,
+                    paddingRight: "5px",
                     color: "#fff",
-                    fontSize: { xs: "14px", md: "16px" },
+                    fontSize: { xs: "13px", md: "16px" },
                     fontWeight: "500",
                   }}
                 >
-                  Sandeep Sokle
+                  {userData.name}
                 </Box>
                 <Avatar
-                  sx={{ sizes: { xs: "10px", md: "16px" } }}
-                  alt="Sandeep Sokle"
+                  sx={{ sizes: { xs: "9px", md: "15px" } }}
+                  alt={userData.name}
+
                   // src="/static/images/avatar/2.jpg"
-                />
+                >
+                  {firstLetter}
+                </Avatar>
               </IconButton>
             </Tooltip>
             <Menu
@@ -129,10 +158,20 @@ function Header(props) {
                 horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+              onClose={() => {
+                handleCloseUserMenu({ setting: null });
+              }}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleCloseUserMenu({
+                      setting,
+                    });
+                  }}
+                >
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}

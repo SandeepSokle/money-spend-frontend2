@@ -7,7 +7,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import {  get_Records_monthly } from "../functions/user";
+import { get_Records_monthly } from "../functions/user";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const monthArray = [
   "January",
@@ -46,21 +48,21 @@ export default function TableMonth() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [tableData, setTableData] = React.useState(null);
+  const location = useLocation();
+
+  const userData = useSelector((state) => {
+    return state.user;
+  });
 
   const getData = async () => {
-    let dt = await get_Records_monthly();
+    let dt = await get_Records_monthly({ userData });
 
-    console.log({ dt });
     setTableData(dt.record);
   };
 
   React.useEffect(() => {
-    getData();
-  }, []);
-
-  console.log({
-    tableData,
-  });
+    if (userData) getData();
+  }, [userData, location]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
