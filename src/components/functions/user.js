@@ -130,20 +130,21 @@ export const user_signUp = async ({ userDetail }) => {
 export const get_user_detail = async ({ dispatch }) => {
   const token = window.localStorage.getItem("moneySpendsToken");
   try {
-    if(!token) throw "not any user"
-    let user = await axios.get(`${API_URL}user`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    dispatch(
-      increment({
-        data: {
-          ...user.data.user,
+    if (token) {
+      let user = await axios.get(`${API_URL}user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      })
-    );
-    return user.data;
+      });
+      dispatch(
+        increment({
+          data: {
+            ...user.data.user,
+          },
+        })
+      );
+      return user.data;
+    }
   } catch (error) {
     return 0;
   }

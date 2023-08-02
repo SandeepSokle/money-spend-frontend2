@@ -41,7 +41,7 @@ export default function TableYearly() {
 
   React.useEffect(() => {
     if (userData) getData();
-  }, [userData, location]);
+  }, [userData, getData]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

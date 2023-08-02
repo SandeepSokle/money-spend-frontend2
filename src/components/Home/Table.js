@@ -62,7 +62,7 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
 
   React.useEffect(() => {
     if (userData) getData();
-  }, [userData]);
+  }, [userData, getData]);
 
   React.useEffect(() => {
     if (search !== "" && dateFilter !== null) {

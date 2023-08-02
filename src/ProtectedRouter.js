@@ -11,7 +11,7 @@ function Protected({ children }) {
 
   useEffect(() => {
     get_user_detail({ dispatch });
-  }, [location]);
+  }, [location,dispatch]);
 
   if (!isSignedIn) {
     return <Navigate to="/login" replace />;
