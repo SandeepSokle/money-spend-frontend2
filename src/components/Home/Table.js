@@ -59,7 +59,7 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
       setTableData(dt?.record);
       setCompleteData(dt?.record);
     }
-  }, []);
+  }, [userData]);
 
   React.useEffect(() => {
     if (userData) getData();

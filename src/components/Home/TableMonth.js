@@ -59,7 +59,7 @@ export default function TableMonth() {
     let dt = await get_Records_monthly({ userData });
 
     setTableData(dt.record);
-  }, []);
+  }, [userData]);
 
   React.useEffect(() => {
     if (userData) getData();
