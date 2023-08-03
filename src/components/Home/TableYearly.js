@@ -9,7 +9,6 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { get_Records_yearly } from "../functions/user";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
 
 const columns = [
   {
