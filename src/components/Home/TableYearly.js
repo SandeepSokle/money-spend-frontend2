@@ -37,7 +37,7 @@ export default function TableYearly() {
   const getData = React.useCallback(async () => {
     let dt = await get_Records_yearly({ userData });
     setTableData(dt.record);
-  });
+  }, []);
 
   React.useEffect(() => {
     if (userData) getData();
