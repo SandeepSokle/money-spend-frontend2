@@ -49,7 +49,6 @@ export default function TableMonth() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [tableData, setTableData] = React.useState(null);
-  const location = useLocation();
 
   const userData = useSelector((state) => {
     return state.user;
