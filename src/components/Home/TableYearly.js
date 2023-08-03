@@ -34,10 +34,10 @@ export default function TableYearly() {
     return state.user;
   });
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     let dt = await get_Records_yearly({ userData });
     setTableData(dt.record);
-  };
+  });
 
   React.useEffect(() => {
     if (userData) getData();

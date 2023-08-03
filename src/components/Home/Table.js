@@ -52,13 +52,13 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
     return state.user;
   });
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     if (userData._id) {
       let dt = await get_Records({ userData });
       setTableData(dt?.record);
       setCompleteData(dt?.record);
     }
-  };
+  });
 
   React.useEffect(() => {
     if (userData) getData();
