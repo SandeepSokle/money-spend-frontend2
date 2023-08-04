@@ -5,9 +5,8 @@ import { useNavigate } from "react-router-dom";
 import TableMonth from "./TableMonth";
 import TableYearly from "./TableYearly";
 import BasicSelect from "./Select";
-import {  useState } from "react";
+import { useState } from "react";
 import CustomDatePicker from "./DatePicker";
-
 
 const Home = () => {
   const [filter, setFilter] = useState("all");

@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { Button } from "@mui/material";
-import { get_Records } from "../functions/user";
+import { get_Records, get_activity_logs } from "../functions/user";
 import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -35,14 +35,14 @@ const columns = [
     minWidth: 100,
   },
   {
-    id: "action",
-    label: "Actions",
+    id: "status",
+    label: "Status",
     minWidth: 150,
     align: "center",
   },
 ];
 
-export default function ColumnGroupingTable({ search, dateFilter }) {
+export default function HistoryTable({ search, dateFilter }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [tableData, setTableData] = React.useState([]);
@@ -55,9 +55,9 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
 
   const getData = useCallback(async () => {
     if (userData._id) {
-      let dt = await get_Records({ userData });
-      setTableData(dt?.record);
-      setCompleteData(dt?.record);
+      let dt = await get_activity_logs({ userData });
+      setTableData(dt?.activityLogs);
+      setCompleteData(dt?.activityLogs);
     }
   }, [userData]);
 
@@ -148,32 +148,7 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
                   >
                     {columns.map((column, idx) => {
                       const value = row[column.id];
-                      if (column.id === "action") {
-                        return (
-                          <TableCell
-                            width={{ md: "18rem", xs: "12rem" }}
-                            key={`${
-                              column.id
-                            }_${new Date().toTimeString()}_${idx}`}
-                            align={column.align}
-                          >
-                            <Button
-                              onClick={() => {
-                                navigate(`/edit/${row._id}`);
-                              }}
-                            >
-                              Edit
-                            </Button>
-                            <Button
-                              onClick={() => {
-                                navigate(`/delete/${row._id}`);
-                              }}
-                            >
-                              Delete
-                            </Button>
-                          </TableCell>
-                        );
-                      } else if (column.id === "date") {
+                      if (column.id === "date") {
                         return (
                           <TableCell
                             width={{ md: "18rem", xs: "12rem" }}

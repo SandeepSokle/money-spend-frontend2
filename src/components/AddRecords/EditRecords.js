@@ -5,6 +5,7 @@ import { edit_Record_API } from "../functions/user";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../functions/config";
+import moment from "moment";
 
 export const EditRecords = () => {
   const [spendBy, setSpendBy] = useState("");
@@ -43,10 +44,15 @@ export const EditRecords = () => {
 
   const handleSubmit = async (event) => {
     if (status === "delete") {
-    const token = window.localStorage.getItem("moneySpendsToken");
-    try {
-        let data = await axios.delete(
+      const token = window.localStorage.getItem("moneySpendsToken");
+      try {
+        let data = await axios.post(
           `${API_URL}transaction/delete_record?id=${id}`,
+          {
+            spendBy,
+            spendFor,
+            amount,
+          },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -103,20 +109,20 @@ export const EditRecords = () => {
         <form autoComplete="off">
           <h2>Today's Transaction</h2>
           <TextField
-            label="Spend Money by"
+            label="Spender"
             onChange={(e) => setSpendBy(e.target.value)}
             required
             variant="outlined"
             color="primary"
             type="text"
-            disabled={status === "delete"}
+            disabled={status === "delete" || status === "edit"}
             sx={{ mb: 3 }}
             fullWidth
             value={spendBy}
             error={spendByError}
           />
           <TextField
-            label="Spend Money For"
+            label="Expense Logs"
             onChange={(e) => setSpendFor(e.target.value)}
             required
             variant="outlined"
@@ -150,7 +156,7 @@ export const EditRecords = () => {
             variant="outlined"
             color="primary"
             type="date"
-            value={dateValue}
+            value={moment(dateValue).format("YYYY-MM-DD")}
             fullWidth
             sx={{ mb: 3 }}
           />
@@ -172,7 +178,7 @@ export const EditRecords = () => {
               Records
             </Button>
             <Button variant="contained" color="primary" onClick={handleSubmit}>
-              {status === "delete" ? "Delete" : "Edit"}
+              {status === "delete" ? "Delete Record" : "Save Changes"}
             </Button>
           </Box>
         </form>

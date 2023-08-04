@@ -13,7 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-const settings = ["Profile", "Account", "Logout"];
+const settings = ["Profile", "History", "Logout"];
 
 function Header(props) {
   const { page } = props;
@@ -40,6 +40,12 @@ function Header(props) {
       window.localStorage.removeItem("moneySpendsToken");
       navigate("/login");
     }
+    if (setting && setting?.toLowerCase() === "profile") {
+      navigate("/profile");
+    }
+    if (setting && setting?.toLowerCase() === "history") {
+      navigate("/history");
+    }
   };
 
   return (
@@ -61,7 +67,7 @@ function Header(props) {
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href="/"
             sx={{
               //   mr: 2,
               display: {
@@ -83,39 +89,40 @@ function Header(props) {
             Expenses
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
-          <Box
-            sx={{
-              marginRight: 2,
-              color: "#fff",
-              fontWeight: "400",
-              display: { xs: "none", md: "flex" },
-              flexDirection: "row",
-              alignItems: "center",
-              fontSize: { xs: "10px", md: "16px" },
-            }}
-          >
-            <Button
-              type="submit"
-              fullWidth
-              variant="outlined"
+          {page === "profile" ? null : (
+            <Box
               sx={{
-                fontSize: "16px",
-                textTransform: "capitalize",
-                background: "var(--joy-palette-info-200, #E1CBFF)",
+                marginRight: 2,
                 color: "#fff",
-              }}
-              onClick={() => {
-                if (page === "home") {
-                  navigate("/add");
-                } else {
-                  navigate("/");
-                }
+                fontWeight: "400",
+                display: { xs: "none", md: "flex" },
+                flexDirection: "row",
+                alignItems: "center",
+                fontSize: { xs: "10px", md: "16px" },
               }}
             >
-              {page === "home" ? "Add Records" : "Records"}
-            </Button>
-          </Box>
-
+              <Button
+                type="submit"
+                fullWidth
+                variant="outlined"
+                sx={{
+                  fontSize: "16px",
+                  textTransform: "capitalize",
+                  background: "var(--joy-palette-info-200, #E1CBFF)",
+                  color: "#fff",
+                }}
+                onClick={() => {
+                  if (page === "home") {
+                    navigate("/add");
+                  } else {
+                    navigate("/");
+                  }
+                }}
+              >
+                {page === "home" ? "Add Records" : "Records"}
+              </Button>
+            </Box>
+          )}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton

@@ -149,3 +149,20 @@ export const get_user_detail = async ({ dispatch }) => {
     return 0;
   }
 };
+
+export const get_activity_logs = async ({ userData }) => {
+  const token = window.localStorage.getItem("moneySpendsToken");
+  try {
+    let data = await axios.get(
+      `${API_URL}transaction/get_activity_logs?user=${userData._id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data.data;
+  } catch (error) {
+    return null;
+  }
+};

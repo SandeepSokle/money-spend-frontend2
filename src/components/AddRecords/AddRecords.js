@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Header from "../Home/Header";
-import { Container,  TextField, Button, Box } from "@mui/material";
+import { Container, TextField, Button, Box } from "@mui/material";
 import { add_Record_API } from "../functions/user";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -54,7 +54,7 @@ export const AddRecords = () => {
         <form autoComplete="off" onSubmit={handleSubmit}>
           <h2>Today's Transaction</h2>
           <TextField
-            label="Spend Money by"
+            label="Spender"
             onChange={(e) => setSpendBy(e.target.value)}
             required
             variant="outlined"
@@ -66,7 +66,7 @@ export const AddRecords = () => {
             error={spendByError}
           />
           <TextField
-            label="Spend Money For"
+            label="Expense Logs"
             onChange={(e) => setSpendFor(e.target.value)}
             required
             variant="outlined"
@@ -97,7 +97,7 @@ export const AddRecords = () => {
             variant="outlined"
             color="primary"
             type="date"
-            value={dateValue}
+            value={moment(dateValue).format("YYYY-MM-DD")}
             fullWidth
             sx={{ mb: 3 }}
           />
@@ -119,7 +119,7 @@ export const AddRecords = () => {
               Records
             </Button>
             <Button variant="contained" color="primary" type="submit">
-              Save
+              Save Record
             </Button>
           </Box>
         </form>

@@ -5,6 +5,8 @@ import NoPage from "./components/NoPage/NoPage";
 import { AddRecords } from "./components/AddRecords/AddRecords";
 import { EditRecords } from "./components/AddRecords/EditRecords";
 import Protected from "./ProtectedRouter";
+import ProfilePage from "./components/Home/Profile";
+import HistoryPage from "./components/Home/HistoryPage";
 
 export default function App() {
   return (
@@ -23,6 +25,22 @@ export default function App() {
           element={
             <Protected>
               <AddRecords />
+            </Protected>
+          }
+        ></Route>
+        <Route
+          path="/profile"
+          element={
+            <Protected>
+              <ProfilePage />
+            </Protected>
+          }
+        ></Route>
+        <Route
+          path="/history"
+          element={
+            <Protected>
+              <HistoryPage />
             </Protected>
           }
         ></Route>
