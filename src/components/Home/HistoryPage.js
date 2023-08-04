@@ -1,6 +1,5 @@
 import { Box, TextField } from "@mui/material";
 import Header from "./Header";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import CustomDatePicker from "./DatePicker";
 import HistoryTable from "./HistoryTable";
@@ -14,7 +13,6 @@ const HistoryPage = () => {
     setSearch(value);
   };
 
-  const navigate = useNavigate();
   return (
     <>
       <Header page={"history"} />
