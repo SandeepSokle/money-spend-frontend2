@@ -57,8 +57,6 @@ export default function TableYearly() {
           };
         });
 
-        console.log({ addList });
-
         return {
           ...e,
           ...addList.reduce((e, a) => {

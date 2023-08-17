@@ -25,6 +25,10 @@ const columns = [
   },
   { id: "spendBy", label: "Spender", minWidth: 150, search: true },
   {
+    id: "expenceCategories",
+    label: "Expence Type",
+  },
+  {
     id: "spendFor",
     label: "Expense Logs",
     minWidth: 170,
@@ -71,6 +75,9 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
         completeData.filter((ele) => {
           return (
             (ele.spendBy.toLowerCase().includes(search.toLowerCase()) ||
+              ele.expenceCategories
+                .toLowerCase()
+                .includes(search.toLowerCase()) ||
               ele.amount
                 .toString()
                 .toLowerCase()
@@ -87,6 +94,9 @@ export default function ColumnGroupingTable({ search, dateFilter }) {
         completeData.filter((ele) => {
           return (
             ele.spendBy.toLowerCase().includes(search.toLowerCase()) ||
+            ele.expenceCategories
+              .toLowerCase()
+              .includes(search.toLowerCase()) ||
             ele.amount
               .toString()
               .toLowerCase()

@@ -85,8 +85,6 @@ export default function TableMonth() {
           };
         });
 
-        console.log({ addList });
-
         return {
           ...e,
           ...addList.reduce((e, a) => {
@@ -121,10 +119,6 @@ export default function TableMonth() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
-  console.log({
-    tableData,
-  });
 
   return (
     <Paper sx={{ width: "100%" }}>
