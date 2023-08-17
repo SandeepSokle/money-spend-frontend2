@@ -31,10 +31,6 @@ export const EditRecords = () => {
       });
       data = data.data.record;
 
-      console.log({
-        data,
-      });
-
       if (!data) return;
       setSpendBy(data.spendBy);
       setDateValue(data.date);
@@ -112,7 +108,6 @@ export const EditRecords = () => {
   return (
     <>
       <Header page={"addrecords"} />
-
       <Container
         sx={{
           width: { xs: "95%", md: "70%" },
