@@ -26,37 +26,87 @@ const monthArray = [
   "December",
 ];
 
-const columns = [
-  {
-    id: "month",
-    label: "Month",
-    minWidth: 150,
-  },
-  {
-    id: "year",
-    label: "Year",
-    minWidth: 150,
-  },
-  {
-    id: "total",
-    label: "Amount",
-    minWidth: 100,
-  },
-];
+// const columns = [
+//   {
+//     id: "month",
+//     label: "Month",
+//     minWidth: 150,
+//   },
+//   {
+//     id: "year",
+//     label: "Year",
+//     minWidth: 150,
+//   },
+//   {
+//     id: "total",
+//     label: "Amount",
+//     minWidth: 100,
+//   },
+// ];
 
 export default function TableMonth() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [tableData, setTableData] = React.useState(null);
+  const [columns, setColumns] = React.useState([
+    {
+      id: "month",
+      label: "Month",
+      minWidth: 150,
+    },
+    {
+      id: "year",
+      label: "Year",
+      minWidth: 150,
+    },
+  ]);
 
   const userData = useSelector((state) => {
     return state.user;
   });
 
+  
+
   const getData = useCallback(async () => {
     let dt = await get_Records_monthly({ userData });
+    let columnList = [];
+    setTableData(
+      dt.record.map((e) => {
+        let addList = e.expenses.map((ele) => {
+          let val = ele.expenseType.replace(/[^a-zA-Z0-9]/g, "");
+          if (val === "total") val = "total1";
+          columnList.push({
+            id: `${val}`,
+            label: ele.expenseType,
+            minWidth: 150,
+          });
+          return {
+            [`${val}`]: ele.totalAmount,
+          };
+        });
 
-    setTableData(dt.record);
+        console.log({ addList });
+
+        return {
+          ...e,
+          ...addList.reduce((e, a) => {
+            return { ...a, ...e };
+          }, {}),
+        };
+      })
+    );
+
+    let newList = [...columns, ...columnList];
+    const uniqueColumns = removeDuplicateColumns(newList);
+
+    setColumns([
+      ...uniqueColumns,
+      {
+        id: "total",
+        label: "Amount",
+        minWidth: 100,
+      },
+    ]);
   }, [userData]);
 
   React.useEffect(() => {
@@ -71,6 +121,10 @@ export default function TableMonth() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  console.log({
+    tableData,
+  });
 
   return (
     <Paper sx={{ width: "100%" }}>
@@ -132,7 +186,7 @@ export default function TableMonth() {
                           >
                             {column.format && typeof value === "number"
                               ? column.format(value)
-                              : value}
+                              : value || 0}
                           </TableCell>
                         );
                       }
@@ -154,4 +208,18 @@ export default function TableMonth() {
       />
     </Paper>
   );
+}
+
+export function removeDuplicateColumns(inputColumns) {
+  const uniqueColumns = [];
+  const seenIDs = new Set();
+
+  for (const column of inputColumns) {
+    if (!seenIDs.has(column.id)) {
+      uniqueColumns.push(column);
+      seenIDs.add(column.id);
+    }
+  }
+
+  return uniqueColumns;
 }

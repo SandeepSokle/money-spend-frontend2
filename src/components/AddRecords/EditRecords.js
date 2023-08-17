@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../functions/config";
 import moment from "moment";
+import SelectInput from "./SelectInput";
 
 export const EditRecords = () => {
   const [spendBy, setSpendBy] = useState("");
@@ -15,6 +16,7 @@ export const EditRecords = () => {
   const [spendByError, setSpendByError] = useState(false);
   const [spendForError, setSpendForError] = useState(false);
   const [amountError, setAmountError] = useState(false);
+  const [expenceCategories, setExpenceCategories] = useState();
   const navigate = useNavigate();
 
   const { status, id } = useParams();
@@ -28,9 +30,18 @@ export const EditRecords = () => {
         },
       });
       data = data.data.record;
+
+      console.log({
+        data,
+      });
+
       if (!data) return;
       setSpendBy(data.spendBy);
       setDateValue(data.date);
+      setExpenceCategories({
+        value: data.expenceCategories,
+        label: data.expenceCategories,
+      });
       setSpendFor(data.spendFor);
       setAmount(data.amount);
     } catch (err) {
@@ -89,6 +100,7 @@ export const EditRecords = () => {
           spendBy,
           spendFor,
           amount,
+          expenceCategories: expenceCategories.value,
           dateValue,
           _id: id,
         });
@@ -120,6 +132,11 @@ export const EditRecords = () => {
             fullWidth
             value={spendBy}
             error={spendByError}
+          />
+          <SelectInput
+             disabled={status === "delete"}
+            expenceCategories={expenceCategories}
+            setExpenceCategories={setExpenceCategories}
           />
           <TextField
             label="Expense Logs"

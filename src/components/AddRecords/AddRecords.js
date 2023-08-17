@@ -4,6 +4,7 @@ import { Container, TextField, Button, Box } from "@mui/material";
 import { add_Record_API } from "../functions/user";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import SelectInput from "./SelectInput";
 
 export const AddRecords = () => {
   const [spendBy, setSpendBy] = useState("");
@@ -11,6 +12,7 @@ export const AddRecords = () => {
   const [spendFor, setSpendFor] = useState("");
   const [amount, setAmount] = useState(0);
   const [spendByError, setSpendByError] = useState(false);
+  const [expenceCategories, setExpenceCategories] = useState();
   const [spendForError, setSpendForError] = useState(false);
   const [amountError, setAmountError] = useState(false);
   const navigate = useNavigate();
@@ -37,6 +39,7 @@ export const AddRecords = () => {
         spendBy,
         spendFor,
         amount,
+        expenceCategories: expenceCategories.value,
         dateValue: moment(dateValue).format("YYYY-MM-DD[T00:00:00.000Z]"),
       });
       navigate("/");
@@ -64,6 +67,10 @@ export const AddRecords = () => {
             fullWidth
             value={spendBy}
             error={spendByError}
+          />
+          <SelectInput
+            expenceCategories={expenceCategories}
+            setExpenceCategories={setExpenceCategories}
           />
           <TextField
             label="Expense Logs"

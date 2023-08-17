@@ -11,6 +11,8 @@ function Protected({ children }) {
 
   useEffect(() => {
     get_user_detail({ dispatch });
+    // getUserExpenseCategories({dispatch})
+
   }, [location,dispatch]);
 
   if (!isSignedIn) {

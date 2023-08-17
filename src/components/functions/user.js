@@ -3,7 +3,7 @@ import { API_URL } from "./config";
 import { increment } from "../../redux/user/action";
 
 export const add_Record_API = async (data) => {
-  const { spendBy, spendFor, amount, dateValue } = data;
+  const { spendBy, spendFor, amount, dateValue, expenceCategories } = data;
   const token = window.localStorage.getItem("moneySpendsToken");
   try {
     let data = await axios.post(
@@ -12,6 +12,7 @@ export const add_Record_API = async (data) => {
         spendBy,
         spendFor,
         amount,
+        expenceCategories,
         date: dateValue,
       },
       {
@@ -44,7 +45,7 @@ export const get_Records = async ({ userData }) => {
 };
 
 export const edit_Record_API = async (data) => {
-  const { spendBy, spendFor, amount, dateValue, _id } = data;
+  const { spendBy, spendFor, amount, dateValue, _id, expenceCategories } = data;
   const token = window.localStorage.getItem("moneySpendsToken");
   try {
     let data = await axios.post(
@@ -53,6 +54,7 @@ export const edit_Record_API = async (data) => {
         spendBy,
         spendFor,
         amount,
+        expenceCategories,
         date: dateValue,
         _id,
       },
@@ -89,7 +91,7 @@ export const get_Records_yearly = async ({ userData }) => {
   const token = window.localStorage.getItem("moneySpendsToken");
   try {
     let data = await axios.get(
-      `${API_URL}transaction/get_record/yearly?user=${userData}`,
+      `${API_URL}transaction/get_record/yearly?user=${userData._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -136,6 +138,7 @@ export const get_user_detail = async ({ dispatch }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+
       dispatch(
         increment({
           data: {
